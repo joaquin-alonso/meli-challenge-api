@@ -1,24 +1,54 @@
 const express = require('express');
 const router = new express.Router();
-const config = require('../config');
+const itemsService = require('../services/items');
 
 router.get('/check', async (req, res) => {
   res.send('ok');
 });
 
-router.get('/api/items', async (req, res) => {
-  const q = req.query;
+router.get('/api/items', async (req, res, next) => {
+  const q = req.query ? req.query.q : false;
 
-  try {
-    const task = await Task.findById(_id);
+  if (q) {
+    itemsService
+      .getItems(q)
+      .then(response => {
+        res.send(response);
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 404) {
+          res.locals.message = `No results found for query "${q}"`;
+          res.locals.stack = error.stack;
+          next();
+        } else {
+          next(error);
+        }
+      });
+  } else {
+    next();
+  }
+});
 
-    if (!task) {
-      return res.status(404).send();
-    }
+router.get('/api/items/:id', async (req, res, next) => {
+  const id = req.params.id;
 
-    res.send(task);
-  } catch (e) {
-    res.status(500).send();
+  if (id) {
+    itemsService
+      .getItem(id)
+      .then(response => {
+        res.send(response);
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 404) {
+          res.locals.message = `Item with id ${id} not found.`;
+          res.locals.stack = error.stack;
+          next();
+        } else {
+          next(error);
+        }
+      });
+  } else {
+    next();
   }
 });
 
