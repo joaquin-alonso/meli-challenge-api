@@ -36,7 +36,7 @@ const getCurrencySymbolFromId = id => {
 
 const formatItem = item => {
   const priceParts = (item.price.toFixed(2) + '').split('.');
-  const stateName = item.address ? item.address.site_name : item.seller_address.state.name;
+  const stateName = item.address ? item.address.state_name : item.seller_address.state.name;
   return {
     id: item.id,
     title: item.title,
