@@ -5,6 +5,35 @@ const author = {
   lastname: 'Alonso'
 };
 
+const getCurrencySymbolFromId = id => {
+  const symbols = {
+    ARS: '$',
+    BOB: 'BS',
+    BRL: 'R$',
+    CLF: 'UF',
+    CLP: '$',
+    COP: '$',
+    CRC: '¢',
+    CUC: 'CUC',
+    CUP: '$',
+    DOP: '$',
+    EUR: '€',
+    GTQ: 'Q',
+    HNL: 'L',
+    MXN: '$',
+    NIO: 'C$',
+    PAB: 'B/.',
+    PEN: 'S/',
+    PYG: '₲',
+    USD: 'U$S',
+    UYU: '$',
+    VEF: 'Bs.',
+    VES: 'Bs.'
+  };
+
+  return symbols[id.toUpperCase()];
+};
+
 const formatItem = item => {
   const priceParts = (item.price.toFixed(2) + '').split('.');
   const stateName = item.address ? item.address.site_name : item.seller_address.state.name;
@@ -12,7 +41,7 @@ const formatItem = item => {
     id: item.id,
     title: item.title,
     price: {
-      currency: item.currency_id,
+      currency: getCurrencySymbolFromId(item.currency_id),
       amount: parseInt(priceParts[0]),
       decimals: parseInt(priceParts[1] || 0)
     },
