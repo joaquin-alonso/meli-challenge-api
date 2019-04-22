@@ -8,10 +8,11 @@ router.get('/check', async (req, res) => {
 
 router.get('/api/items', async (req, res, next) => {
   const q = req.query ? req.query.q : false;
+  const limit = 4;
 
   if (q) {
     itemsService
-      .getItems(q)
+      .getItems(q, limit)
       .then(response => {
         res.send(response);
       })

@@ -104,10 +104,10 @@ const formatItemResponse = (item, description, category = []) => {
   };
 };
 
-const getItems = async q => {
+const getItems = async (q, limit = 10) => {
   try {
     const query = encodeURIComponent(q);
-    const res = await axios.get(`${config.meliApi}sites/MLA/search?q=${query}`);
+    const res = await axios.get(`${config.meliApi}sites/MLA/search?q=${query}&limit=${limit}`);
     return formatItemsResponse(res.data);
   } catch (error) {
     throw error;
